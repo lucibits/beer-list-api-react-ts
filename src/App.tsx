@@ -9,7 +9,6 @@ function App() {
   const [beers, setBeers] = useState<Beer[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const beerPerPage: number = 8;
-  // const [age, setAge] = useState<number>();
 
   useEffect(() => {
     console.log(currentPage, "useEffect currentPage");

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 // totalBeers 325
 
 // Prev-Next Button component
@@ -9,9 +9,6 @@ interface PrevNextButton {
 function PrevNextButton({ name, onClick }: PrevNextButton) {
   return <button onClick={onClick}>{name}</button>;
 }
-
-// When I click > I want to tell the currentpage has changed to the next one
-//
 
 // Pagination component
 interface PaginationProps {
@@ -31,8 +28,8 @@ export default function Pagination({
   let maxPages = Math.ceil(totalItems / itemsPerPage);
   let amountOfPages = 5;
 
-  let fromPage = Math.max(1, currentPage - Math.floor(amountOfPages / 2));
-  let toPage = Math.min(maxPages, currentPage + Math.floor(amountOfPages / 2));
+  const [fromPage, setFromPage] = useState<number>(1);
+  let toPage = fromPage + amountOfPages;
 
   if (fromPage + toPage - 1 < amountOfPages) {
     toPage += amountOfPages - (fromPage + toPage) + 1;
@@ -43,7 +40,16 @@ export default function Pagination({
 
   return (
     <div className="pagination">
-      <PrevNextButton name="Previous" onClick={() => console.log("Previous")} />
+      <PrevNextButton
+        name="Past"
+        onClick={() => {
+          if (fromPage - amountOfPages < 1) {
+            setFromPage(1);
+          } else {
+            setFromPage(fromPage - amountOfPages);
+          }
+        }}
+      />
       {pages.map((page: number, index: number) => {
         return (
           <button
@@ -57,7 +63,16 @@ export default function Pagination({
           </button>
         );
       })}
-      <PrevNextButton name="Next" onClick={() => console.log("Next")} />
+      <PrevNextButton
+        name="Next"
+        onClick={() => {
+          if (fromPage + amountOfPages < maxPages) {
+            setFromPage(fromPage + amountOfPages);
+          } else {
+            setFromPage(maxPages - amountOfPages);
+          }
+        }}
+      />
     </div>
   );
 }
